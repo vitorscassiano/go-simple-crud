@@ -5,17 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"shortener.com/v1/models"
+	"shortener.com/v1/wire"
 )
-
-type CreateBookInput struct {
-	Title  string `json:"title" binding:"required"`
-	Author string `json:"author" binding:"required"`
-}
-
-type UpdateBookInput struct {
-	Title  string `json:"title"`
-	Author string `json:"author"`
-}
 
 func FindBooks(c *gin.Context) {
 	var books []models.Book
@@ -25,7 +16,7 @@ func FindBooks(c *gin.Context) {
 }
 
 func CreateBook(c *gin.Context) {
-	var input CreateBookInput
+	var input wire.CreateBookInput
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -57,7 +48,7 @@ func UpdateBook(c *gin.Context) {
 		return
 	}
 
-	var input UpdateBookInput
+	var input wire.UpdateBookInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
